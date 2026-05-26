@@ -44,13 +44,12 @@ class FreeplayState extends MusicBeatState
 		songs.push(new TrickyButton(80,120,'menu/freeplay/Improbable Outset Button','menu/freeplay/Improbable Outset Confirm',selectSong, 'Improbable-Outset', -30));
 		songs.push(new TrickyButton(80,240,'menu/freeplay/Madness Button','menu/freeplay/Madness Confirm',selectSong, 'Madness', -30));
 		songs.push(new TrickyButton(80,360,'menu/freeplay/Hellclown Button','menu/freeplay/Hellclown Confirm',selectSong, 'Hellclown', -30));
-        if (diff == 0)	
-	    	songFour = new TrickyButton(300,420,'menu/freeplay/Expurgation Button','menu/freeplay/Expurgation Confirm',selectSong, 'expurgation', 0, 15);
-        if (diff == 1)
-		    songFour = new TrickyButton(300,420,'menu/freeplay/Expurgation-Emoji Button','menu/freeplay/Expurgation-Emoji Confirm',selectSong, 'expurgation', 0, 10);
+		var expurgationSuffix:String = diff == 1 ? "-Emoji" : "";
+		var expurgationTweenY:Float = diff == 1 ? 10 : 15;
+	    songFour = new TrickyButton(300,420,'menu/freeplay/Expurgation Button' + expurgationSuffix,'menu/freeplay/Expurgation Confirm' + expurgationSuffix,selectSong, 'expurgation', 0, expurgationTweenY);
 
-		songFour.spriteOne = new FlxSprite(songFour.trueX + songFour.tweenX, songFour.trueY + songFour.tweenY).loadGraphic(Paths.image('menu/freeplay/Expurgation Button',"clown"), true, 800, 200);
-        songFour.spriteTwo = new FlxSprite(songFour.trueX + songFour.tweenX, songFour.trueY + songFour.tweenY).loadGraphic(Paths.image('menu/freeplay/Expurgation Confirm',"clown"), true, 800, 200);
+		songFour.spriteOne = new FlxSprite(songFour.trueX + songFour.tweenX, songFour.trueY + songFour.tweenY).loadGraphic(Paths.image('menu/freeplay/Expurgation Button' + expurgationSuffix,"clown"), true, 800, 200);
+        songFour.spriteTwo = new FlxSprite(songFour.trueX + songFour.tweenX, songFour.trueY + songFour.tweenY).loadGraphic(Paths.image('menu/freeplay/Expurgation Confirm' + expurgationSuffix,"clown"), true, 800, 200);
         songFour.spriteTwo.alpha = 0;
 		songFour.spriteOne.animation.add("static", [0, 1, 2, 3], 12, true);
 		songFour.spriteTwo.animation.add("static", [0, 1, 2, 3], 12, true);
@@ -113,15 +112,6 @@ class FreeplayState extends MusicBeatState
 
 	function diffGet()
 	{
-		switch (diff)
-		{
-			case 0:
-				return "EASY";
-			case 1:
-				return "MEDIUM";
-			case 2:
-				return "HARD";
-		}
 		if (songs[selectedIndex].pognt == 'expurgation')
 		{
 			switch (diff)
@@ -130,7 +120,18 @@ class FreeplayState extends MusicBeatState
 			    	return "UNFAIR";
 			    case 1:
 	     			return "EMOJI";
+				case 2:
+					return "UNFAIR";
 			}
+		}
+		switch (diff)
+		{
+			case 0:
+				return "EASY";
+			case 1:
+				return "MEDIUM";
+			case 2:
+				return "HARD";
 		}
 		return "what";
 	}
@@ -146,12 +147,11 @@ class FreeplayState extends MusicBeatState
 				MusicMenu.Vocals.stop();
 
 		if (songs[selectedIndex].pognt == 'expurgation')
-		{
-		}
-		else
-			PlayState.storyDifficulty = diff;
+			diffToUse = diff == 1 ? 1 : 2;
 
-		var poop:String = Highscore.formatSong(songs[selectedIndex].pognt.toLowerCase(), diffToUse);
+		PlayState.storyDifficulty = diffToUse;
+
+		var poop:String = songs[selectedIndex].pognt == 'expurgation' && diffToUse == 1 ? 'expurgation-emoji' : Highscore.formatSong(songs[selectedIndex].pognt.toLowerCase(), diffToUse);
 
 		PlayState.SONG = Song.loadFromJson(poop, songs[selectedIndex].pognt.toLowerCase());
 		PlayState.isStoryMode = false;
@@ -185,7 +185,7 @@ class FreeplayState extends MusicBeatState
 	
 			var score = Highscore.getScore(songs[selectedIndex].pognt,diff);
 			if (songs[selectedIndex].pognt == 'expurgation')
-				score = Highscore.getScore(songs[selectedIndex].pognt,2);
+				score = Highscore.getScore(songs[selectedIndex].pognt, diff == 1 ? 1 : 2);
 			diffAndScore.text = diffGet() + " - " + score; 
 
 			if (FlxG.keys.justPressed.ESCAPE && !selectedSmth)

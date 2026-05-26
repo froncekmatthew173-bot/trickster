@@ -159,7 +159,8 @@ class PlayState extends MusicBeatState
 		KeyBinds.keyCheck();
 
 		FlxG.sound.cache(Paths.inst(PlayState.SONG.song));
-		FlxG.sound.cache(Paths.voices(PlayState.SONG.song));
+		if (PlayState.SONG.needsVoices)
+			FlxG.sound.cache(Paths.voicesForSong(PlayState.SONG.song, PlayState.SONG.player2));
 
 		generatedMusic = false;
 		theFunne = FlxG.save.data.newInput;
@@ -326,51 +327,6 @@ class PlayState extends MusicBeatState
 
 			add(hank);
 		}
-		else if (SONG.song.toLowerCase() == 'expurgation')
-		{
-			//trace("line 538");
-			defaultCamZoom = 0.55;
-			curStage = 'auditorHell';
-
-			tstatic.antialiasing = true;
-			tstatic.scrollFactor.set(0,0);
-			tstatic.setGraphicSize(Std.int(tstatic.width * 8.3));
-			tstatic.animation.add('static', [0, 1, 2], 24, true);
-			tstatic.animation.play('static');
-
-			tstatic.alpha = 0;
-
-			var bg:FlxSprite = new FlxSprite(-10, -10).loadGraphic(Paths.image('fourth/bg','clown'));
-			bg.antialiasing = true;
-			bg.scrollFactor.set(0.9, 0.9);
-			bg.active = false;
-			bg.setGraphicSize(Std.int(bg.width * 4));
-			add(bg);
-
-			hole.antialiasing = true;
-			hole.scrollFactor.set(0.9, 0.9);
-					
-			converHole.antialiasing = true;
-			converHole.scrollFactor.set(0.9, 0.9);
-			converHole.setGraphicSize(Std.int(converHole.width * 1.3));
-			hole.setGraphicSize(Std.int(hole.width * 1.55));
-
-			cover.antialiasing = true;
-			cover.scrollFactor.set(0.9, 0.9);
-			cover.setGraphicSize(Std.int(cover.width * 1.55));
-
-			var energyWall:FlxSprite = new FlxSprite(1350,-690).loadGraphic(Paths.image("fourth/Energywall","clown"));
-			energyWall.antialiasing = true;
-			energyWall.scrollFactor.set(0.9, 0.9);
-			add(energyWall);
-			
-			var stageFront:FlxSprite = new FlxSprite(-350, -355).loadGraphic(Paths.image('fourth/daBackground','clown'));
-			stageFront.antialiasing = true;
-			stageFront.scrollFactor.set(0.9, 0.9);
-			stageFront.setGraphicSize(Std.int(stageFront.width * 1.55));
-			add(stageFront);
-		}
-		
 		else if (SONG.song.toLowerCase() == 'expurgation' && SONG.player2 == 'cryingEmoji')
 		{
 			//trace("line 538");
@@ -410,6 +366,50 @@ class PlayState extends MusicBeatState
 			add(energyWall);
 			
 			var stageFront:FlxSprite = new FlxSprite(-350, -355).loadGraphic(Paths.image('emoji/daBackground','clown'));
+			stageFront.antialiasing = true;
+			stageFront.scrollFactor.set(0.9, 0.9);
+			stageFront.setGraphicSize(Std.int(stageFront.width * 1.55));
+			add(stageFront);
+		}
+		else if (SONG.song.toLowerCase() == 'expurgation')
+		{
+			//trace("line 538");
+			defaultCamZoom = 0.55;
+			curStage = 'auditorHell';
+
+			tstatic.antialiasing = true;
+			tstatic.scrollFactor.set(0,0);
+			tstatic.setGraphicSize(Std.int(tstatic.width * 8.3));
+			tstatic.animation.add('static', [0, 1, 2], 24, true);
+			tstatic.animation.play('static');
+
+			tstatic.alpha = 0;
+
+			var bg:FlxSprite = new FlxSprite(-10, -10).loadGraphic(Paths.image('fourth/bg','clown'));
+			bg.antialiasing = true;
+			bg.scrollFactor.set(0.9, 0.9);
+			bg.active = false;
+			bg.setGraphicSize(Std.int(bg.width * 4));
+			add(bg);
+
+			hole.antialiasing = true;
+			hole.scrollFactor.set(0.9, 0.9);
+					
+			converHole.antialiasing = true;
+			converHole.scrollFactor.set(0.9, 0.9);
+			converHole.setGraphicSize(Std.int(converHole.width * 1.3));
+			hole.setGraphicSize(Std.int(hole.width * 1.55));
+
+			cover.antialiasing = true;
+			cover.scrollFactor.set(0.9, 0.9);
+			cover.setGraphicSize(Std.int(cover.width * 1.55));
+
+			var energyWall:FlxSprite = new FlxSprite(1350,-690).loadGraphic(Paths.image("fourth/Energywall","clown"));
+			energyWall.antialiasing = true;
+			energyWall.scrollFactor.set(0.9, 0.9);
+			add(energyWall);
+			
+			var stageFront:FlxSprite = new FlxSprite(-350, -355).loadGraphic(Paths.image('fourth/daBackground','clown'));
 			stageFront.antialiasing = true;
 			stageFront.scrollFactor.set(0.9, 0.9);
 			stageFront.setGraphicSize(Std.int(stageFront.width * 1.55));
@@ -527,11 +527,13 @@ class PlayState extends MusicBeatState
 
 		if (curStage == 'auditorHell')
 		{
+			var exAssetPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji' : 'fourth';
+			var cloneCacheId:String = SONG.player2 == 'cryingEmoji' ? 'clnEmoji' : 'cln';
 			// Clown init
 			cloneOne = new FlxSprite(0,0);
 			cloneTwo = new FlxSprite(0,0);
-			cloneOne.frames = CachedFrames.cachedInstance.fromSparrow('cln','fourth/Clone');
-			cloneTwo.frames = CachedFrames.cachedInstance.fromSparrow('cln','fourth/Clone');
+			cloneOne.frames = CachedFrames.cachedInstance.fromSparrow(cloneCacheId,exAssetPrefix + '/Clone');
+			cloneTwo.frames = CachedFrames.cachedInstance.fromSparrow(cloneCacheId,exAssetPrefix + '/Clone');
 			cloneOne.alpha = 0;
 			cloneTwo.alpha = 0;
 			cloneOne.animation.addByPrefix('clone','Clone',24,false);
@@ -741,9 +743,10 @@ class PlayState extends MusicBeatState
 			switch (curSong.toLowerCase())
 			{
 				case 'expurgation':
+					var exAssetPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji' : 'fourth';
 					camFollow.setPosition(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
 					var spawnAnim = new FlxSprite(-150,-380);
-					spawnAnim.frames = Paths.getSparrowAtlas('fourth/EXENTER','clown');
+					spawnAnim.frames = Paths.getSparrowAtlas(exAssetPrefix + '/EXENTER','clown');
 
 					spawnAnim.animation.addByPrefix('start','Entrance',24,false);
 
@@ -783,7 +786,9 @@ class PlayState extends MusicBeatState
 		var daSign:FlxSprite = new FlxSprite(0,0);
 		// CachedFrames.cachedInstance.get('sign')
 
-		daSign.frames = CachedFrames.cachedInstance.fromSparrow('sign','fourth/mech/Sign_Post_Mechanic');
+		var exMechPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji/mech' : 'fourth/mech';
+		var signCacheId:String = SONG.player2 == 'cryingEmoji' ? 'signEmoji' : 'sign';
+		daSign.frames = CachedFrames.cachedInstance.fromSparrow(signCacheId,exMechPrefix + '/Sign_Post_Mechanic');
 
 		daSign.setGraphicSize(Std.int(daSign.width * 0.67));
 
@@ -850,7 +855,9 @@ class PlayState extends MusicBeatState
 
 		var gramlan:FlxSprite = new FlxSprite(0,0);
 
-		gramlan.frames = CachedFrames.cachedInstance.fromSparrow('grem','fourth/mech/HP GREMLIN');
+		var exMechPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji/mech' : 'fourth/mech';
+		var gremCacheId:String = SONG.player2 == 'cryingEmoji' ? 'gremEmoji' : 'grem';
+		gramlan.frames = CachedFrames.cachedInstance.fromSparrow(gremCacheId,exMechPrefix + '/HP GREMLIN');
 
 		gramlan.setGraphicSize(Std.int(gramlan.width * 0.76));
 
@@ -1656,9 +1663,7 @@ class PlayState extends MusicBeatState
 		curSong = songData.song;
 
 		if (SONG.needsVoices)
-			vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song));
-		if (SONG.needsVoices && SONG.player2 == 'cryingEmoji')
-			vocals = new FlxSound().loadEmbedded(Paths.voicescryingEmoji(PlayState.SONG.song));
+			vocals = new FlxSound().loadEmbedded(Paths.voicesForSong(PlayState.SONG.song, SONG.player2));
 		else
 			vocals = new FlxSound();
 
