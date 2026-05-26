@@ -356,6 +356,11 @@ class MainMenuState extends MusicBeatState
 		add(trans);
 		trans.alpha = 0;
 
+		#if mobile
+		addVirtualPad(LEFT_FULL, A_B);
+		addVirtualPadCamera();
+		#end
+
 		/*switch(selectedIndex)
 		{
 			case 0:
@@ -590,7 +595,7 @@ class MainMenuState extends MusicBeatState
 		}
 		if (!selectingDiff)
 		{
-			if (FlxG.keys.justPressed.RIGHT)
+			if (controls.RIGHT_P)
 			{
 				if (show == 'sus' && !killed && hand.alpha == 1)
 					FlxTween.tween(hand, {alpha: 0, x: shower.x + 60, y: shower.y + 60}, 0.6, {ease: FlxEase.expoInOut});
@@ -613,7 +618,7 @@ class MainMenuState extends MusicBeatState
 					trace('selected ' + selectedIndex);
 				}
 			}
-			if (FlxG.keys.justPressed.LEFT)
+			if (controls.LEFT_P)
 			{
 				if (show == 'sus' && !killed && hand.alpha == 1)
 					FlxTween.tween(hand, {alpha: 0, x: shower.x + 60, y: shower.y + 60}, 0.6, {ease: FlxEase.expoInOut});
@@ -638,7 +643,7 @@ class MainMenuState extends MusicBeatState
 			}
 			
 
-			if (FlxG.keys.justPressed.ENTER && !selectedSmth)
+			if (controls.ACCEPT && !selectedSmth)
 			{
 				if (show == 'sus' && !killed)
 				{
@@ -653,7 +658,7 @@ class MainMenuState extends MusicBeatState
 		}
 		else
 		{
-			if (FlxG.keys.justPressed.ESCAPE)
+			if (controls.BACK)
 			{
 				selectingDiff = false;
 				listOfButtons[0].highlight();
@@ -662,7 +667,7 @@ class MainMenuState extends MusicBeatState
 				selectedSmth = false;
 			}
 
-			if (FlxG.keys.justPressed.RIGHT)
+			if (controls.RIGHT_P)
 				{
 					if (diffSelectedIndex + 1 < listOfDiffButtons.length)
 					{
@@ -674,7 +679,7 @@ class MainMenuState extends MusicBeatState
 					else
 						trace('CANT select ' + diffSelectedIndex);
 				}
-				if (FlxG.keys.justPressed.LEFT)
+				if (controls.LEFT_P)
 				{
 					if (diffSelectedIndex > 0)
 					{
@@ -688,7 +693,7 @@ class MainMenuState extends MusicBeatState
 				}
 				
 	
-				if (FlxG.keys.justPressed.ENTER)
+				if (controls.ACCEPT)
 				{
 					selectedSmth = false;
 					listOfDiffButtons[diffSelectedIndex].select();

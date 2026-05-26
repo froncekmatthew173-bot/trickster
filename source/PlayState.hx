@@ -707,6 +707,13 @@ class PlayState extends MusicBeatState
 		botplayTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 
+		#if mobile
+		addVirtualPad(BLANK, A_B);
+		addVirtualPadCamera(false);
+		addHitbox();
+		addHitboxCamera(false);
+		#end
+
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
 		// UI_camera.zoom = 1;
@@ -1962,7 +1969,7 @@ class PlayState extends MusicBeatState
 		scoreTxt.text = Ratings.CalculateRanking(songScore,0,nps,accuracy);
 		botplayTxt.visible = FlxG.save.data.botplay;
 
-		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
+		if ((FlxG.keys.justPressed.ENTER || controls.PAUSE || controls.ACCEPT) && startedCountdown && canPause)
 		{
 			persistentUpdate = false;
 			persistentDraw = true;

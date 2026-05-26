@@ -80,6 +80,10 @@ class PauseSubState extends MusicBeatSubstate
 
 		FlxTween.globalManager.active = false;
 
+		#if mobile
+		addVirtualPad(UP_DOWN, A_B);
+		#end
+
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 

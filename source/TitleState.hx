@@ -11,6 +11,9 @@ import flixel.addons.transition.TransitionData;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup;
+#if android
+import flixel.input.android.FlxAndroidKey;
+#end
 import flixel.input.gamepad.FlxGamepad;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
@@ -45,6 +48,10 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
+		#if android
+		FlxG.android.preventDefaultKeys = [FlxAndroidKey.BACK];
+		#end
+
 		#if polymod
 		//polymod.Polymod.init({modRoot: "mods", dirs: ['introMod']});
 		#end
