@@ -40,7 +40,7 @@ jobs:
         if: matrix.target == 'linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libvlc-dev libvlccore-dev
+          sudo apt-get install -y g++-multilib gcc-multilib libc6-dev-i386 libvlc-dev libvlccore-dev
 
       - name: Install Haxelibs
         shell: bash
