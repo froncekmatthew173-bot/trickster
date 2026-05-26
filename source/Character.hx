@@ -394,6 +394,31 @@ class Character extends FlxSprite
 				addOffset("singDOWN",-100,-340);
 
 				playAnim('idle');
+
+				
+			case 'cryingEmoji':
+				frames = Paths.getSparrowAtlas('emoji/EXTRICKY','clown');
+				exSpikes = new FlxSprite(x - 350,y - 170);
+				exSpikes.frames = Paths.getSparrowAtlas('emoji/FloorSpikes','clown');
+				exSpikes.visible = false;
+
+				exSpikes.animation.addByPrefix('spike','Floor Spikes', 24, false);
+
+				animation.addByPrefix('idle', 'Idle', 24);
+				animation.addByPrefix('singUP', 'Sing Up', 24);
+				animation.addByPrefix('singLEFT', 'Sing Left', 24);
+				animation.addByPrefix('singRIGHT', 'Sing Right', 24);
+				animation.addByPrefix('singDOWN', 'Sing Down', 24);
+				animation.addByPrefix('Hank', 'Hank', 24, true);
+
+				addOffset('idle');
+				addOffset('Hank');
+				addOffset("singUP", 0, 100);
+				addOffset("singRIGHT", -209,-29);
+				addOffset("singLEFT",127,20);
+				addOffset("singDOWN",-100,-340);
+
+				playAnim('idle');
 		}
 
 		antialiasing = true;
@@ -461,7 +486,7 @@ class Character extends FlxSprite
 				case 'gf':
 					if (animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
 						playAnim('danceRight');
-				case 'exTricky':
+				case 'exTricky' | 'cryingEmoji':
 					if (exSpikes.animation.frameIndex >= 3 && animation.curAnim.name == 'singUP')
 					{
 						trace('paused');
@@ -609,7 +634,7 @@ class Character extends FlxSprite
 			{
 				animation.play(AnimName, Force, Reversed, Frame);
 
-				if (curCharacter == 'exTricky')
+				if (curCharacter == 'exTricky' || curCharacter == 'cryingEmoji')
 				{
 					if (AnimName == 'singUP')
 					{

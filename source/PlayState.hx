@@ -130,6 +130,7 @@ class PlayState extends MusicBeatState
 	var talking:Bool = true;
 	var songScore:Int = 0;
 	var scoreTxt:FlxText;
+	var botplayTxt:FlxText;
 	var replayTxt:FlxText;
 
 	var gfDance:Bool = false;
@@ -158,7 +159,8 @@ class PlayState extends MusicBeatState
 		KeyBinds.keyCheck();
 
 		FlxG.sound.cache(Paths.inst(PlayState.SONG.song));
-		FlxG.sound.cache(Paths.voices(PlayState.SONG.song));
+		if (PlayState.SONG.needsVoices)
+			FlxG.sound.cache(Paths.voicesForSong(PlayState.SONG.song, PlayState.SONG.player2));
 
 		generatedMusic = false;
 		theFunne = FlxG.save.data.newInput;
@@ -325,6 +327,50 @@ class PlayState extends MusicBeatState
 
 			add(hank);
 		}
+		else if (SONG.song.toLowerCase() == 'expurgation' && SONG.player2 == 'cryingEmoji')
+		{
+			//trace("line 538");
+			defaultCamZoom = 0.55;
+			curStage = 'auditorHell';
+
+			tstatic.antialiasing = true;
+			tstatic.scrollFactor.set(0,0);
+			tstatic.setGraphicSize(Std.int(tstatic.width * 8.3));
+			tstatic.animation.add('static', [0, 1, 2], 24, true);
+			tstatic.animation.play('static');
+
+			tstatic.alpha = 0;
+
+			var bg:FlxSprite = new FlxSprite(-10, -10).loadGraphic(Paths.image('emoji/bg','clown'));
+			bg.antialiasing = true;
+			bg.scrollFactor.set(0.9, 0.9);
+			bg.active = false;
+			bg.setGraphicSize(Std.int(bg.width * 4));
+			add(bg);
+
+			hole.antialiasing = true;
+			hole.scrollFactor.set(0.9, 0.9);
+					
+			converHole.antialiasing = true;
+			converHole.scrollFactor.set(0.9, 0.9);
+			converHole.setGraphicSize(Std.int(converHole.width * 1.3));
+			hole.setGraphicSize(Std.int(hole.width * 1.55));
+
+			cover.antialiasing = true;
+			cover.scrollFactor.set(0.9, 0.9);
+			cover.setGraphicSize(Std.int(cover.width * 1.55));
+
+			var energyWall:FlxSprite = new FlxSprite(1350,-690).loadGraphic(Paths.image("emoji/Energywall","clown"));
+			energyWall.antialiasing = true;
+			energyWall.scrollFactor.set(0.9, 0.9);
+			add(energyWall);
+			
+			var stageFront:FlxSprite = new FlxSprite(-350, -355).loadGraphic(Paths.image('emoji/daBackground','clown'));
+			stageFront.antialiasing = true;
+			stageFront.scrollFactor.set(0.9, 0.9);
+			stageFront.setGraphicSize(Std.int(stageFront.width * 1.55));
+			add(stageFront);
+		}
 		else if (SONG.song.toLowerCase() == 'expurgation')
 		{
 			//trace("line 538");
@@ -444,6 +490,12 @@ class PlayState extends MusicBeatState
 				gf.x += 345;
 				gf.y -= 25;
 				dad.visible = false;
+			case 'cryingEmoji':
+				dad.x -= 250;
+				dad.y -= 365;
+				gf.x += 345;
+				gf.y -= 25;
+				dad.visible = false;
 		}
 
 
@@ -481,11 +533,13 @@ class PlayState extends MusicBeatState
 
 		if (curStage == 'auditorHell')
 		{
+			var exAssetPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji' : 'fourth';
+			var cloneCacheId:String = SONG.player2 == 'cryingEmoji' ? 'clnEmoji' : 'cln';
 			// Clown init
 			cloneOne = new FlxSprite(0,0);
 			cloneTwo = new FlxSprite(0,0);
-			cloneOne.frames = CachedFrames.cachedInstance.fromSparrow('cln','fourth/Clone');
-			cloneTwo.frames = CachedFrames.cachedInstance.fromSparrow('cln','fourth/Clone');
+			cloneOne.frames = CachedFrames.cachedInstance.fromSparrow(cloneCacheId,exAssetPrefix + '/Clone');
+			cloneTwo.frames = CachedFrames.cachedInstance.fromSparrow(cloneCacheId,exAssetPrefix + '/Clone');
 			cloneOne.alpha = 0;
 			cloneTwo.alpha = 0;
 			cloneOne.animation.addByPrefix('clone','Clone',24,false);
@@ -620,6 +674,13 @@ class PlayState extends MusicBeatState
 		scoreTxt.y = healthBarBG.y + 50;
 		add(scoreTxt);
 
+		botplayTxt = new FlxText(400, healthBarBG.y - 90, FlxG.width - 800, "BOTPLAY", 20);
+		botplayTxt.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		botplayTxt.scrollFactor.set();
+		botplayTxt.screenCenter(X);
+		botplayTxt.visible = FlxG.save.data.botplay;
+		add(botplayTxt);
+
 		replayTxt = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 75, healthBarBG.y + (FlxG.save.data.downscroll ? 100 : -100), 0, "REPLAY", 20);
 		replayTxt.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		replayTxt.scrollFactor.set();
@@ -643,6 +704,7 @@ class PlayState extends MusicBeatState
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
+		botplayTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 
 		// if (SONG.song == 'South')
@@ -687,9 +749,10 @@ class PlayState extends MusicBeatState
 			switch (curSong.toLowerCase())
 			{
 				case 'expurgation':
+					var exAssetPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji' : 'fourth';
 					camFollow.setPosition(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
 					var spawnAnim = new FlxSprite(-150,-380);
-					spawnAnim.frames = Paths.getSparrowAtlas('fourth/EXENTER','clown');
+					spawnAnim.frames = Paths.getSparrowAtlas(exAssetPrefix + '/EXENTER','clown');
 
 					spawnAnim.animation.addByPrefix('start','Entrance',24,false);
 
@@ -729,7 +792,9 @@ class PlayState extends MusicBeatState
 		var daSign:FlxSprite = new FlxSprite(0,0);
 		// CachedFrames.cachedInstance.get('sign')
 
-		daSign.frames = CachedFrames.cachedInstance.fromSparrow('sign','fourth/mech/Sign_Post_Mechanic');
+		var exMechPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji/mech' : 'fourth/mech';
+		var signCacheId:String = SONG.player2 == 'cryingEmoji' ? 'signEmoji' : 'sign';
+		daSign.frames = CachedFrames.cachedInstance.fromSparrow(signCacheId,exMechPrefix + '/Sign_Post_Mechanic');
 
 		daSign.setGraphicSize(Std.int(daSign.width * 0.67));
 
@@ -796,7 +861,9 @@ class PlayState extends MusicBeatState
 
 		var gramlan:FlxSprite = new FlxSprite(0,0);
 
-		gramlan.frames = CachedFrames.cachedInstance.fromSparrow('grem','fourth/mech/HP GREMLIN');
+		var exMechPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji/mech' : 'fourth/mech';
+		var gremCacheId:String = SONG.player2 == 'cryingEmoji' ? 'gremEmoji' : 'grem';
+		gramlan.frames = CachedFrames.cachedInstance.fromSparrow(gremCacheId,exMechPrefix + '/HP GREMLIN');
 
 		gramlan.setGraphicSize(Std.int(gramlan.width * 0.76));
 
@@ -1602,7 +1669,7 @@ class PlayState extends MusicBeatState
 		curSong = songData.song;
 
 		if (SONG.needsVoices)
-			vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song));
+			vocals = new FlxSound().loadEmbedded(Paths.voicesForSong(PlayState.SONG.song, SONG.player2));
 		else
 			vocals = new FlxSound();
 
@@ -1893,6 +1960,7 @@ class PlayState extends MusicBeatState
 		super.update(elapsed);
 
 		scoreTxt.text = Ratings.CalculateRanking(songScore,0,nps,accuracy);
+		botplayTxt.visible = FlxG.save.data.botplay;
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
@@ -2215,7 +2283,12 @@ class PlayState extends MusicBeatState
 				}
 
 		if (!inCutscene)
-			keyShit();
+		{
+			if (FlxG.save.data.botplay)
+				botplayShit();
+			else
+				keyShit();
+		}
 
 		/*
 			if (FlxG.keys.justPressed.ONE)
@@ -2248,7 +2321,8 @@ class PlayState extends MusicBeatState
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
 			#if !switch
-			Highscore.saveScore(SONG.song, songScore, storyDifficulty);
+			if (!FlxG.save.data.botplay)
+				Highscore.saveScore(SONG.song, songScore, storyDifficulty);
 			#end
 		
 
@@ -2577,6 +2651,47 @@ class PlayState extends MusicBeatState
 	var leftHold:Bool = false;	
 
 	var noteHit:Int = 0;
+	private function botplayShit():Void
+	{
+		if (!generatedMusic)
+			return;
+
+		var hitNote:Bool = false;
+
+		notes.forEachAlive(function(daNote:Note)
+		{
+			if (daNote.mustPress && !daNote.burning && !daNote.tooLate && !daNote.wasGoodHit && Conductor.songPosition >= daNote.strumTime)
+			{
+				hitNote = true;
+				goodNoteHit(daNote);
+			}
+		});
+
+		if (hitNote)
+			boyfriend.holdTimer = 0;
+
+		if (boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001)
+		{
+			if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss'))
+				boyfriend.playAnim('idle');
+		}
+
+		playerStrums.forEach(function(spr:FlxSprite)
+		{
+			if (spr.animation.curAnim.name != 'confirm')
+				spr.animation.play('static');
+
+			if (spr.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
+			{
+				spr.centerOffsets();
+				spr.offset.x -= 13;
+				spr.offset.y -= 13;
+			}
+			else
+				spr.centerOffsets();
+		});
+	}
+
 	private function keyShit():Void // I've invested in emma stocks
 		{
 			var control = PlayerSettings.player1.controls;

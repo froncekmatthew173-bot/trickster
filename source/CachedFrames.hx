@@ -112,6 +112,9 @@ class CachedFrames
             toBeLoaded.set('idle','hellclwn/Tricky/Idle');
             toBeLoaded.set('grem','fourth/mech/HP GREMLIN');
             toBeLoaded.set('cln','fourth/Clone');
+            toBeLoaded.set('signEmoji','emoji/mech/Sign_Post_Mechanic');
+            toBeLoaded.set('gremEmoji','emoji/mech/HP GREMLIN');
+            toBeLoaded.set('clnEmoji','emoji/Clone');
             // all the big sprites
             var numba = 0;
             for(i in toBeLoaded.keys())

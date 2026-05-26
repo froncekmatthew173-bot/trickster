@@ -128,6 +128,9 @@ class Ratings
 
     public static function CalculateRanking(score:Int,scoreDef:Int,nps:Int,accuracy:Float):String
     {
+        if (FlxG.save.data.botplay)
+            return (FlxG.save.data.npsDisplay ? "NPS: " + nps + " | " : "") + "BOTPLAY";
+
         return 
         (FlxG.save.data.npsDisplay ? "NPS: " + nps + (!FlxG.save.data.botplay ? " | " : "") : "") + (!FlxG.save.data.botplay ?	// NPS Toggle
         "Score:" + (Conductor.safeFrames != 10 ? score + " (" + scoreDef + ")" : "" + score) + 									// Score
