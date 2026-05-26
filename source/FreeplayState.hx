@@ -110,6 +110,11 @@ class FreeplayState extends MusicBeatState
 
 		songs[0].highlight();
 
+		#if mobile
+		addVirtualPad(LEFT_FULL, A_B);
+		addVirtualPadCamera();
+		#end
+
 	}
 
 	function diffGet()
@@ -193,19 +198,19 @@ class FreeplayState extends MusicBeatState
 			songFour.spriteOne.color = diff == 1 ? FlxColor.fromRGB(255, 174, 0) : FlxColor.WHITE;
 			songFour.spriteTwo.color = diff == 1 ? FlxColor.fromRGB(255, 174, 0) : FlxColor.WHITE;
 
-			if (FlxG.keys.justPressed.ESCAPE && !selectedSmth)
+			if (controls.BACK && !selectedSmth)
 			{
 				selectedSmth = true;
 				MainMenuState.curDifficulty = diff;
 				FlxG.switchState(new MainMenuState());
 			}
 
-			if (FlxG.keys.justPressed.RIGHT)
+			if (controls.RIGHT_P)
 			{
 				FlxG.sound.play(Paths.sound('Hover','clown'));
 				diff += 1;
 			}
-			if (FlxG.keys.justPressed.LEFT)
+			if (controls.LEFT_P)
 			{
 				FlxG.sound.play(Paths.sound('Hover','clown'));
 				diff -= 1;
@@ -216,7 +221,7 @@ class FreeplayState extends MusicBeatState
 			if (diff < 0)
 				diff = 2;
 
-			if (FlxG.keys.justPressed.DOWN)
+			if (controls.DOWN_P)
 				{
 					if (selectedIndex + 1 < songs.length)
 					{
@@ -237,7 +242,7 @@ class FreeplayState extends MusicBeatState
 						trace('selected ' + selectedIndex);
 					}
 				}
-				if (FlxG.keys.justPressed.UP)
+				if (controls.UP_P)
 				{
 					if (selectedIndex > 0)
 					{
@@ -260,7 +265,7 @@ class FreeplayState extends MusicBeatState
 				}
 			
 	
-			if (FlxG.keys.justPressed.ENTER && !selectedSmth)
+			if (controls.ACCEPT && !selectedSmth)
 			{
 				selectedSmth = true;
 				songs[selectedIndex].select();
