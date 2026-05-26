@@ -369,6 +369,51 @@ class PlayState extends MusicBeatState
 			stageFront.setGraphicSize(Std.int(stageFront.width * 1.55));
 			add(stageFront);
 		}
+		
+		else if (SONG.song.toLowerCase() == 'expurgation' && SONG.player2 == 'cryingEmoji')
+		{
+			//trace("line 538");
+			defaultCamZoom = 0.55;
+			curStage = 'auditorHell';
+
+			tstatic.antialiasing = true;
+			tstatic.scrollFactor.set(0,0);
+			tstatic.setGraphicSize(Std.int(tstatic.width * 8.3));
+			tstatic.animation.add('static', [0, 1, 2], 24, true);
+			tstatic.animation.play('static');
+
+			tstatic.alpha = 0;
+
+			var bg:FlxSprite = new FlxSprite(-10, -10).loadGraphic(Paths.image('emoji/bg','clown'));
+			bg.antialiasing = true;
+			bg.scrollFactor.set(0.9, 0.9);
+			bg.active = false;
+			bg.setGraphicSize(Std.int(bg.width * 4));
+			add(bg);
+
+			hole.antialiasing = true;
+			hole.scrollFactor.set(0.9, 0.9);
+					
+			converHole.antialiasing = true;
+			converHole.scrollFactor.set(0.9, 0.9);
+			converHole.setGraphicSize(Std.int(converHole.width * 1.3));
+			hole.setGraphicSize(Std.int(hole.width * 1.55));
+
+			cover.antialiasing = true;
+			cover.scrollFactor.set(0.9, 0.9);
+			cover.setGraphicSize(Std.int(cover.width * 1.55));
+
+			var energyWall:FlxSprite = new FlxSprite(1350,-690).loadGraphic(Paths.image("emoji/Energywall","clown"));
+			energyWall.antialiasing = true;
+			energyWall.scrollFactor.set(0.9, 0.9);
+			add(energyWall);
+			
+			var stageFront:FlxSprite = new FlxSprite(-350, -355).loadGraphic(Paths.image('emoji/daBackground','clown'));
+			stageFront.antialiasing = true;
+			stageFront.scrollFactor.set(0.9, 0.9);
+			stageFront.setGraphicSize(Std.int(stageFront.width * 1.55));
+			add(stageFront);
+		}
 		else
 		{
 			defaultCamZoom = 0.9;
@@ -1603,6 +1648,8 @@ class PlayState extends MusicBeatState
 
 		if (SONG.needsVoices)
 			vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song));
+		if (SONG.needsVoices && SONG.player2 == 'cryingEmoji')
+			vocals = new FlxSound().loadEmbedded(Paths.voicescryingEmoji(PlayState.SONG.song));
 		else
 			vocals = new FlxSound();
 

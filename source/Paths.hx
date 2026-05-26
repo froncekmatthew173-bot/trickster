@@ -90,6 +90,11 @@ class Paths
 		return 'songs:assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
 	}
 
+	inline static public function voicescryingEmoji(song:String)
+	{
+		return 'songs:assets/songs/${song.toLowerCase()}/Voices-cryingEmoji.$SOUND_EXT';
+	}
+
 	inline static public function inst(song:String)
 	{
 		return 'songs:assets/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';

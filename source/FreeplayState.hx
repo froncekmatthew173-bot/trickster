@@ -44,7 +44,10 @@ class FreeplayState extends MusicBeatState
 		songs.push(new TrickyButton(80,120,'menu/freeplay/Improbable Outset Button','menu/freeplay/Improbable Outset Confirm',selectSong, 'Improbable-Outset', -30));
 		songs.push(new TrickyButton(80,240,'menu/freeplay/Madness Button','menu/freeplay/Madness Confirm',selectSong, 'Madness', -30));
 		songs.push(new TrickyButton(80,360,'menu/freeplay/Hellclown Button','menu/freeplay/Hellclown Confirm',selectSong, 'Hellclown', -30));
-		songFour = new TrickyButton(300,420,'menu/freeplay/Expurgation Button','menu/freeplay/Expurgation Confirm',selectSong, 'expurgation', 0, 15);
+        if (diff == 0)	
+	    	songFour = new TrickyButton(300,420,'menu/freeplay/Expurgation Button','menu/freeplay/Expurgation Confirm',selectSong, 'expurgation', 0, 15);
+        if (diff == 1)
+		    songFour = new TrickyButton(300,420,'menu/freeplay/Expurgation-Emoji Button','menu/freeplay/Expurgation-Emoji Confirm',selectSong, 'expurgation', 0, 10);
 
 		songFour.spriteOne = new FlxSprite(songFour.trueX + songFour.tweenX, songFour.trueY + songFour.tweenY).loadGraphic(Paths.image('menu/freeplay/Expurgation Button',"clown"), true, 800, 200);
         songFour.spriteTwo = new FlxSprite(songFour.trueX + songFour.tweenX, songFour.trueY + songFour.tweenY).loadGraphic(Paths.image('menu/freeplay/Expurgation Confirm',"clown"), true, 800, 200);
@@ -110,8 +113,6 @@ class FreeplayState extends MusicBeatState
 
 	function diffGet()
 	{
-		if (songs[selectedIndex].pognt == 'expurgation')
-			return "UNFAIR";
 		switch (diff)
 		{
 			case 0:
@@ -120,6 +121,14 @@ class FreeplayState extends MusicBeatState
 				return "MEDIUM";
 			case 2:
 				return "HARD";
+		}
+		if (songs[selectedIndex].pognt == 'expurgation')
+		{
+			switch (diff)
+		    	case 0:
+			    	return "UNFAIR";
+			    case 1:
+	     			return "EMOJI";
 		}
 		return "what";
 	}
@@ -136,8 +145,6 @@ class FreeplayState extends MusicBeatState
 
 		if (songs[selectedIndex].pognt == 'expurgation')
 		{
-			PlayState.storyDifficulty = 2;
-			diffToUse = 2;
 		}
 		else
 			PlayState.storyDifficulty = diff;
