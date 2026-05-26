@@ -130,6 +130,7 @@ class PlayState extends MusicBeatState
 	var talking:Bool = true;
 	var songScore:Int = 0;
 	var scoreTxt:FlxText;
+	var botplayTxt:FlxText;
 	var replayTxt:FlxText;
 
 	var gfDance:Bool = false;
@@ -665,6 +666,13 @@ class PlayState extends MusicBeatState
 		scoreTxt.y = healthBarBG.y + 50;
 		add(scoreTxt);
 
+		botplayTxt = new FlxText(400, healthBarBG.y - 90, FlxG.width - 800, "BOTPLAY", 20);
+		botplayTxt.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		botplayTxt.scrollFactor.set();
+		botplayTxt.screenCenter(X);
+		botplayTxt.visible = FlxG.save.data.botplay;
+		add(botplayTxt);
+
 		replayTxt = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 75, healthBarBG.y + (FlxG.save.data.downscroll ? 100 : -100), 0, "REPLAY", 20);
 		replayTxt.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		replayTxt.scrollFactor.set();
@@ -688,6 +696,7 @@ class PlayState extends MusicBeatState
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
+		botplayTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 
 		// if (SONG.song == 'South')
@@ -1940,6 +1949,7 @@ class PlayState extends MusicBeatState
 		super.update(elapsed);
 
 		scoreTxt.text = Ratings.CalculateRanking(songScore,0,nps,accuracy);
+		botplayTxt.visible = FlxG.save.data.botplay;
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
@@ -2262,7 +2272,12 @@ class PlayState extends MusicBeatState
 				}
 
 		if (!inCutscene)
-			keyShit();
+		{
+			if (FlxG.save.data.botplay)
+				botplayShit();
+			else
+				keyShit();
+		}
 
 		/*
 			if (FlxG.keys.justPressed.ONE)
@@ -2295,7 +2310,8 @@ class PlayState extends MusicBeatState
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
 			#if !switch
-			Highscore.saveScore(SONG.song, songScore, storyDifficulty);
+			if (!FlxG.save.data.botplay)
+				Highscore.saveScore(SONG.song, songScore, storyDifficulty);
 			#end
 		
 
@@ -2624,6 +2640,47 @@ class PlayState extends MusicBeatState
 	var leftHold:Bool = false;	
 
 	var noteHit:Int = 0;
+	private function botplayShit():Void
+	{
+		if (!generatedMusic)
+			return;
+
+		var hitNote:Bool = false;
+
+		notes.forEachAlive(function(daNote:Note)
+		{
+			if (daNote.mustPress && !daNote.burning && !daNote.tooLate && !daNote.wasGoodHit && Conductor.songPosition >= daNote.strumTime)
+			{
+				hitNote = true;
+				goodNoteHit(daNote);
+			}
+		});
+
+		if (hitNote)
+			boyfriend.holdTimer = 0;
+
+		if (boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001)
+		{
+			if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss'))
+				boyfriend.playAnim('idle');
+		}
+
+		playerStrums.forEach(function(spr:FlxSprite)
+		{
+			if (spr.animation.curAnim.name != 'confirm')
+				spr.animation.play('static');
+
+			if (spr.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
+			{
+				spr.centerOffsets();
+				spr.offset.x -= 13;
+				spr.offset.y -= 13;
+			}
+			else
+				spr.centerOffsets();
+		});
+	}
+
 	private function keyShit():Void // I've invested in emma stocks
 		{
 			var control = PlayerSettings.player1.controls;

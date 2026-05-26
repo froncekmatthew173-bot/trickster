@@ -23,6 +23,7 @@ class OptionsMenu extends MusicBeatState
 		new OptionCatagory("Gameplay", [
 			new DFJKOption(controls),
 			new GhostTapOption("Ghost Tapping is when you tap a direction and it doesn't give you a miss."),
+			new BotPlayOption("Let the game play hittable notes for you. Scores are not saved while this is enabled."),
 			#if desktop
 			new FPSCapOption("Cap your FPS (Left for -10, Right for +10. SHIFT to go faster)"),
 			#end

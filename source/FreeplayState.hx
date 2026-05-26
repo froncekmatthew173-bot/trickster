@@ -125,10 +125,12 @@ class FreeplayState extends MusicBeatState
 		if (songs[selectedIndex].pognt == 'expurgation')
 		{
 			switch (diff)
+			{
 		    	case 0:
 			    	return "UNFAIR";
 			    case 1:
 	     			return "EMOJI";
+			}
 		}
 		return "what";
 	}
