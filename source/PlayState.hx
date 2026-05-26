@@ -490,6 +490,12 @@ class PlayState extends MusicBeatState
 				gf.x += 345;
 				gf.y -= 25;
 				dad.visible = false;
+			case 'cryingEmoji':
+				dad.x -= 250;
+				dad.y -= 365;
+				gf.x += 345;
+				gf.y -= 25;
+				dad.visible = false;
 		}
 
 

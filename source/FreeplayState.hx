@@ -45,8 +45,10 @@ class FreeplayState extends MusicBeatState
 		songs.push(new TrickyButton(80,240,'menu/freeplay/Madness Button','menu/freeplay/Madness Confirm',selectSong, 'Madness', -30));
 		songs.push(new TrickyButton(80,360,'menu/freeplay/Hellclown Button','menu/freeplay/Hellclown Confirm',selectSong, 'Hellclown', -30));
 		var expurgationSuffix:String = diff == 1 ? "-Emoji" : "";
-		var expurgationTweenY:Float = diff == 1 ? 10 : 15;
-	    songFour = new TrickyButton(300,420,'menu/freeplay/Expurgation Button' + expurgationSuffix,'menu/freeplay/Expurgation Confirm' + expurgationSuffix,selectSong, 'expurgation', 0, expurgationTweenY);
+		if (diff == 1)
+			songFour = new TrickyButton(300,420,'menu/freeplay/Expurgation Button-Emoji','menu/freeplay/Expurgation Confirm-Emoji',selectSong, 'expurgation', 0, 10);
+		else
+			songFour = new TrickyButton(300,420,'menu/freeplay/Expurgation Button','menu/freeplay/Expurgation Confirm',selectSong, 'expurgation', 0, 15);
 
 		songFour.spriteOne = new FlxSprite(songFour.trueX + songFour.tweenX, songFour.trueY + songFour.tweenY).loadGraphic(Paths.image('menu/freeplay/Expurgation Button' + expurgationSuffix,"clown"), true, 800, 200);
         songFour.spriteTwo = new FlxSprite(songFour.trueX + songFour.tweenX, songFour.trueY + songFour.tweenY).loadGraphic(Paths.image('menu/freeplay/Expurgation Confirm' + expurgationSuffix,"clown"), true, 800, 200);
@@ -187,6 +189,9 @@ class FreeplayState extends MusicBeatState
 			if (songs[selectedIndex].pognt == 'expurgation')
 				score = Highscore.getScore(songs[selectedIndex].pognt, diff == 1 ? 1 : 2);
 			diffAndScore.text = diffGet() + " - " + score; 
+			diffAndScore.color = songs[selectedIndex].pognt == 'expurgation' && diff == 1 ? FlxColor.fromRGB(255, 174, 0) : FlxColor.RED;
+			songFour.spriteOne.color = diff == 1 ? FlxColor.fromRGB(255, 174, 0) : FlxColor.WHITE;
+			songFour.spriteTwo.color = diff == 1 ? FlxColor.fromRGB(255, 174, 0) : FlxColor.WHITE;
 
 			if (FlxG.keys.justPressed.ESCAPE && !selectedSmth)
 			{
