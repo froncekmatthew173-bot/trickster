@@ -92,7 +92,7 @@
 	<haxelib name="flixel-ui" />
 	<haxelib name="actuate" />
 	<haxelib name="newgrounds"/>
-	<haxelib name="extension-webm"/>
+	<haxelib name="extension-webm" unless="mobile"/>
 	<haxelib name="extension-androidtools" if="android"/>
 	<haxelib name="faxe" if='switch'/>
 	<haxelib name="polymod"/>
