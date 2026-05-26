@@ -5,8 +5,13 @@ on:
     branches:
       - main
       - master
+    tags:
+      - "v*"
   pull_request:
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -63,8 +68,31 @@ jobs:
       - name: Build
         run: haxelib run lime build ${{ matrix.target }} -release
 
+      - name: Package build
+        shell: pwsh
+        run: |
+          $binDirs = Get-ChildItem -Path export/release -Recurse -Directory -Filter bin
+          if ($binDirs.Count -eq 0) {
+            throw "No release bin directory found."
+          }
+
+          $staging = "release/trickster-${{ matrix.target }}"
+          New-Item -ItemType Directory -Force -Path $staging | Out-Null
+
+          foreach ($bin in $binDirs) {
+            Copy-Item -Path (Join-Path $bin.FullName "*") -Destination $staging -Recurse -Force
+          }
+
+          Compress-Archive -Path "$staging/*" -DestinationPath "release/trickster-${{ matrix.target }}.zip" -Force
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: trickster-${{ matrix.target }}
-          path: export/release/**/bin
+          path: release/trickster-${{ matrix.target }}.zip
+
+      - name: Upload release asset
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/trickster-${{ matrix.target }}.zip
