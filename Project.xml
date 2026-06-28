@@ -160,11 +160,12 @@
 	<icon path="art/icon64.png" size='64' unless="troll_icons"/>
 	<icon path="art/iconOG.png" unless="troll_icons"/>
 
-	<icon path="art/troll_icons/icon16.png" size='16' if="troll_icons"/>
-	<icon path="art/troll_icons/icon32.png" size='32' if="troll_icons"/>
-	<icon path="art/troll_icons/icon64.png" size='64' if="troll_icons"/>
-	<icon path="art/troll_icons/iconOG.png" if="troll_icons"/>
-
+	<section if="troll_icons">
+		<icon path="art/troll_icons/icon16.png" size='16'/>
+		<icon path="art/troll_icons/icon32.png" size='32'/>
+		<icon path="art/troll_icons/icon64.png" size='64'/>
+		<icon path="art/troll_icons/iconOG.png"/>
+	</section>
 
 	<!-- <haxedef name="SKIP_TO_PLAYSTATE" if="debug" /> -->
 	<haxedef name="NG_LOGIN" if="newgrounds" />
