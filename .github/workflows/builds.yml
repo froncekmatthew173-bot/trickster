@@ -152,6 +152,14 @@ jobs:
           haxelib git extension-androidtools https://github.com/jigsaw-4277821/extension-androidtools.git
           haxelib git extension-webm https://github.com/KadeDev/extension-webm
 
+      - name: Patch extension-webm for Android
+        run: |
+          WEBM_DIR="$(haxelib path extension-webm | head -1)"
+          SRC="$WEBM_DIR/project/libwebm/mkvmuxerutil.cpp"
+          if [ -f "$SRC" ] && ! grep -q '#include <unistd.h>' "$SRC"; then
+            { echo '#include <unistd.h>'; cat "$SRC"; } > "$SRC.tmp" && mv "$SRC.tmp" "$SRC"
+          fi
+
       - name: Rebuild extension-webm
         run: haxelib run lime rebuild extension-webm android -DHXCPP_ARM64
 
@@ -202,6 +210,14 @@ jobs:
           haxelib install newgrounds 1.1.5
           haxelib install polymod 1.5.2
           haxelib git extension-webm https://github.com/KadeDev/extension-webm
+
+      - name: Patch extension-webm for iOS
+        run: |
+          WEBM_DIR="$(haxelib path extension-webm | head -1)"
+          SRC="$WEBM_DIR/project/libwebm/mkvmuxerutil.cpp"
+          if [ -f "$SRC" ] && ! grep -q '#include <unistd.h>' "$SRC"; then
+            { echo '#include <unistd.h>'; cat "$SRC"; } > "$SRC.tmp" && mv "$SRC.tmp" "$SRC"
+          fi
 
       - name: Rebuild extension-webm
         run: haxelib run lime rebuild extension-webm ios
