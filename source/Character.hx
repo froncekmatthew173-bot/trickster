@@ -395,6 +395,29 @@ class Character extends FlxSprite
 
 				playAnim('idle');
 
+			case 'Mario':
+				frames = Paths.getSparrowAtlas('mario/EXTRICKY','clown');
+				exSpikes = new FlxSprite(x - 350,y - 170);
+				exSpikes.frames = Paths.getSparrowAtlas('mario/FloorSpikes','clown');
+				exSpikes.visible = false;
+
+				exSpikes.animation.addByPrefix('spike','Floor Spikes', 24, false);
+
+				animation.addByPrefix('idle', 'Idle', 24);
+				animation.addByPrefix('singUP', 'Sing Up', 24);
+				animation.addByPrefix('singLEFT', 'Sing Left', 24);
+				animation.addByPrefix('singRIGHT', 'Sing Right', 24);
+				animation.addByPrefix('singDOWN', 'Sing Down', 24);
+				animation.addByPrefix('Hank', 'Hank', 24, true);
+
+				addOffset('idle');
+				addOffset('Hank');
+				addOffset("singUP", 0, 100);
+				addOffset("singRIGHT", -209,-29);
+				addOffset("singLEFT",127,20);
+				addOffset("singDOWN",-100,-340);
+
+				playAnim('idle');
 				
 			case 'cryingEmoji':
 				frames = Paths.getSparrowAtlas('emoji/EXTRICKY','clown');
