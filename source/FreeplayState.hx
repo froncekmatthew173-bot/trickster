@@ -128,7 +128,7 @@ class FreeplayState extends MusicBeatState
 			    case 1:
 	     			return "EMOJI";
 				case 2:
-					return "UNFAIR";
+					return "MARIO";
 			}
 		}
 		switch (diff)
