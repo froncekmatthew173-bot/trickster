@@ -95,9 +95,15 @@ class Paths
 		return 'songs:assets/songs/${song.toLowerCase()}/Voices-cryingEmoji.$SOUND_EXT';
 	}
 
+	inline static public function voiceMario(song:String)
+	{
+		return 'songs:assets/songs/${song.toLowerCase()}/Voices-Mario.$SOUND_EXT';
+	}
+
 	inline static public function voicesForSong(song:String, player2:String)
 	{
 		return player2 == 'cryingEmoji' ? voicescryingEmoji(song) : voices(song);
+		return player2 == 'Mario' ? voiceMario(song) : voices(song);
 	}
 
 	inline static public function inst(song:String)
