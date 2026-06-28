@@ -584,9 +584,8 @@ class PlayState extends MusicBeatState
 
 		if (curStage == 'auditorHell')
 		{
-			var exAssetPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji' : 'fourth';
-			var exAssetPrefix:String = SONG.player2 == 'Mario' ? 'mario' : 'fourth';
-			var cloneCacheId:String = SONG.player2 == 'cryingEmoji' ? 'clnEmoji' : 'cln' || SONG.player2 == 'Mario' ? 'clnMario' : 'cln';
+			var exAssetPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji' : (SONG.player2 == 'Mario' ? 'mario' : 'fourth');
+			var cloneCacheId:String = SONG.player2 == 'cryingEmoji' ? 'clnEmoji' : (SONG.player2 == 'Mario' ? 'clnMario' : 'cln');
 			// Clown init
 			cloneOne = new FlxSprite(0,0);
 			cloneTwo = new FlxSprite(0,0);
@@ -808,7 +807,7 @@ class PlayState extends MusicBeatState
 			switch (curSong.toLowerCase())
 			{
 				case 'expurgation':
-					var exAssetPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji' : 'fourth' || SONG.player2 == 'Mario' ? 'mario' : 'fourth';
+					var exAssetPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji' : (SONG.player2 == 'Mario' ? 'mario' : 'fourth');
 					camFollow.setPosition(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
 					var spawnAnim = new FlxSprite(-150,-380);
 					spawnAnim.frames = Paths.getSparrowAtlas(exAssetPrefix + '/EXENTER','clown');
@@ -851,8 +850,8 @@ class PlayState extends MusicBeatState
 		var daSign:FlxSprite = new FlxSprite(0,0);
 		// CachedFrames.cachedInstance.get('sign')
 
-		var exMechPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji/mech' : 'fourth/mech' || SONG.player2 == 'Mario' ? 'emoji/mech' : 'fourth/mech';
-		var signCacheId:String = SONG.player2 == 'cryingEmoji' ? 'signEmoji' : 'sign' || SONG.player2 == 'Mario' ? 'signMario' : 'sign';
+		var exMechPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji/mech' : (SONG.player2 == 'Mario' ? 'mario/mech' : 'fourth/mech');
+		var signCacheId:String = SONG.player2 == 'cryingEmoji' ? 'signEmoji' : (SONG.player2 == 'Mario' ? 'signMario' : 'sign');
 		daSign.frames = CachedFrames.cachedInstance.fromSparrow(signCacheId,exMechPrefix + '/Sign_Post_Mechanic');
 
 		daSign.setGraphicSize(Std.int(daSign.width * 0.67));
@@ -920,8 +919,8 @@ class PlayState extends MusicBeatState
 
 		var gramlan:FlxSprite = new FlxSprite(0,0);
 
-		var exMechPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji/mech' : 'fourth/mech' || SONG.player2 == 'Mario' ? 'mario/mech' : 'fourth/mech';
-		var gremCacheId:String = SONG.player2 == 'cryingEmoji' ? 'gremEmoji' : 'grem' || SONG.player2 == 'Mario' ? 'gremMario' : 'grem';
+		var exMechPrefix:String = SONG.player2 == 'cryingEmoji' ? 'emoji/mech' : (SONG.player2 == 'Mario' ? 'mario/mech' : 'fourth/mech');
+		var gremCacheId:String = SONG.player2 == 'cryingEmoji' ? 'gremEmoji' : (SONG.player2 == 'Mario' ? 'gremMario' : 'grem');
 		gramlan.frames = CachedFrames.cachedInstance.fromSparrow(gremCacheId,exMechPrefix + '/HP GREMLIN');
 
 		gramlan.setGraphicSize(Std.int(gramlan.width * 0.76));
